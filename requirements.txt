@@ -1,0 +1,12 @@
+sentence-transformers
+uvicorn
+ctransformers
+langchain
+langchain_community
+langchain-ollama
+python-box
+streamlit
+dotenv
+openai
+ollama
+slack_bolt
