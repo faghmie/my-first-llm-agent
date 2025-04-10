@@ -1,5 +1,5 @@
 import math 
-from tool import Tool
+from tools.tool import Tool
 
 class CalculatorTool(Tool):
     def name(self):
@@ -8,8 +8,9 @@ class CalculatorTool(Tool):
     def description(self):
         return """Evaluates simple mathematical expressions. 
             Supports operations like addition, subtraction, multiplication, and division. 
-            arguments should be passed as a simple string with the correct mathematical symbols.
+            argument should be passed as a simple string with the correct mathematical symbols.
             Ensure that all unnecessary spaces are removed.
+            the argument must contain only the expression to be evaluated. Do not include any special characters.
             When evaluating an expression, the following english words should converted to their mathematical symbols:
             divide or divide by = /
             plus or add = +
