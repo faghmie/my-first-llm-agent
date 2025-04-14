@@ -7,8 +7,17 @@ class TimeTool(Tool):
         return "Time Tool"
 
     def description(self):
-        return ("""Gives the current time for a given city's
-         	    timezone like Europe/Lisbon, America/New_York etc. If no timezone is provided, it returns the local time.""")
+        return ("""Provides the current time for a given city. 
+                - **Important**: 
+                    - Only use this tool to get the current time.
+                    - Do not use this tool to determine the timezone.
+                    - Do not use this tool to convert timezones.
+                - **Argument**: 
+                    - User must supply a valid timezone in string format, for example: "Asia/Tokyo"
+                - **Result**: 
+                    - The current time for a city in the format: "YYYY-MM-DD HH:MM:SS +0000"
+                    - If no timezone is provided, it returns the local time.
+                """)
 
     def use(self, *args, **kwargs):
         format = "%Y-%m-%d %H:%M:%S %Z%z"

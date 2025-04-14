@@ -1,29 +1,23 @@
-import requests
 import json
-import ast
 import re
+import logging
+import json
 
-from tools.tool import Tool
-from tools.timetool import TimeTool
-from tools.calculatortool import CalculatorTool
+from toolbox import Toolbox
 
 from dotenv import load_dotenv
 import os
 
-import ollama
 from langchain_ollama import OllamaLLM, ChatOllama
 
 class Agent:
     def __init__(self):
-        self.tools = []
+        self.toolbox = Toolbox()
         self.memory = []
         self.max_memory = 10
         self.agent_prompt = None
 
-    def add_tool(self, tool: Tool):
-        self.tools.append(tool)
-
-    def load_prompt(self, prompt_path="prompt.txt"):
+    def load_prompt(self, prompt_path="prompt_analyst.md"):
         with open(prompt_path, "r") as f:
             self.agent_prompt = f.read()
 
@@ -41,11 +35,15 @@ class Agent:
                 if match:
                     json_str = match.group(1)
                 else:
-                    raise ValueError("No JSON object found in the LLM response.")
+                    json_str = json.dumps({"action": "respond_to_user", "args": input_string})
+
+                    # raise ValueError("No JSON object found in the LLM response.")
             # Parse the JSON string
+            print(f"JSON string:\n {json_str}\n")
             json_dict = json.loads(json_str)
             if isinstance(json_dict, dict):
                 return json_dict
+
         except json.JSONDecodeError as e:
             print(f"JSON parsing error: {e}")
 
@@ -53,26 +51,30 @@ class Agent:
 
         raise ValueError("Invalid JSON response from LLM.")
 
+    def clean_llm_response(self, input_string):
+        # Remove the <think> and </think> tags from DeepSeek response
+        cleaned = re.sub(r'<think>.*?</think>', '', input_string, flags=re.DOTALL).strip()
+        return cleaned
+
     def process_input(self, user_input):
-        context = "\n".join(self.memory)
+        short_term_memory = "\n".join(self.memory)
 
         self.memory.append(f"User: {user_input}")
         self.memory = self.memory[-self.max_memory:]
 
-        tool_descriptions = "\n".join(
-            [f"- {tool.name()}: {tool.description()}" for tool in self.tools]
+        prompt = self.agent_prompt.format(
+            short_term_memory   = short_term_memory,
+            available_tools     = self.toolbox.get_tool_list(),
+            user_input          = user_input,
+            tool_names          = self.toolbox.get_tool_names(),
         )
 
-        prompt = self.agent_prompt.format(
-            context=context,
-            tool_descriptions=tool_descriptions,
-            user_input=user_input)
-
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
         print(prompt)
-        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
 
         response = self.query_llm(prompt)
+        
         self.memory.append(f"Agent: {response}")
 
         response_dict = self.json_parser(response)
@@ -85,7 +87,7 @@ class Agent:
             # return response_dict["args"]
         else:
             # Find and use the appropriate tool
-            for tool in self.tools:
+            for tool in self.toolbox.tools:
                 if tool.name().lower() == response_dict["action"].lower():
                     answer = tool.use(response_dict["args"])
                     self.memory.append(f"<answer> {answer}</answer>")
@@ -102,12 +104,11 @@ class Agent:
         )
 
         ai_msg = llm.invoke(prompt)
+        print("<ai-message>")
         print(ai_msg.content)
-        return ai_msg.content
-
-        # gemini= LLM("vertexai/gemini-1.5-pro-latest", api_key= GOOGLE_API_KEY)
-        # response=gemini.chat(prompt).choices[0].message.content.strip()
-        # return response
+        print("</ai-message>")
+        
+        return self.clean_llm_response(ai_msg.content)
 
     def run(self):
         
@@ -123,8 +124,9 @@ class Agent:
             response = self.process_input(user_input)
             print(f"Agent: {response}")
 
+# I have received a new request from the user to build a new dashboard for enterprise users to track API usage analytics
+# Now save the requirements to a file
+
 if __name__ == "__main__":
     agent = Agent()
-    agent.add_tool(TimeTool())
-    agent.add_tool(CalculatorTool())
     agent.run()

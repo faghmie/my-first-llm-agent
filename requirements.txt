@@ -9,4 +9,5 @@ streamlit
 dotenv
 openai
 ollama
-slack_bolt
+timezonefinder
+geopy
