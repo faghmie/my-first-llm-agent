@@ -1,13 +1,10 @@
 from abc import ABC, abstractmethod
 
-class Tool(ABC):
-    @abstractmethod
-    def name(self) -> str:
-        pass
 
-    @abstractmethod
-    def description(self) -> str:
-        pass
+class Tool(ABC):
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
     @abstractmethod
     def use(self, *args, **kwargs):

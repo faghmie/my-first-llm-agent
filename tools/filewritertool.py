@@ -1,61 +1,36 @@
 from tools.tool import Tool
 
 
-
 class FileWriterTool(Tool):
 
+    """
+        This tool is used to write a text file to disk
+    """
 
-    def name(self):
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
 
-        return "Write To Disk"
-
-
-
-    def description(self):
-
-        return ("""
-                **Description**:
-                    This tool is used to write a text file to disk
-                    - User should provide a name for the file
-                    - if no name is provided, a default name will be used
-
-                **Input Rules**:
-                    - Type: Array[string, string]
-                    - Number of Arguments: 2
-                    - Max Length: 2
-                    - Min Length: 2
-                    - Example: ["my_file", "this is the content of the file"]
-                    - arguments must be passed in the format: [filename, file_content]
-                    - filename: this is the first argument and is the name of the file to be created
-                    - file_content: this is the second argument and is the content to be written to the file
-                    - **Example**: ["my_file", "this is the content of the file"]
-                    - **Important**: The arguments must be passed as a list
-                    - List must have **two elements ONLY**: 
-                        - first element is the filename
-                        - second element is the file content
-                    - end of tool input rules
-
-                """)
-
-
-    def use(self, *args, **kwargs):
-
-        print(args)
-
-        file = args[0]
-
-
-        if not file or len(file) < 2:
-
-            return "Error: Please provide a filename and requirements to write to the file."
+    def use(self, filename: str, content: str) -> str:
+        """
+        This function takes a JSON object as an argument and writes its content to a file
+        specified in the JSON object. 
+        If no filename or content is provided, this function will return an error message
         
+        Args:
+            filename (str): Name/path of the file to save
+            content (str): Text content to write to the file
+        
+        Returns:
+            str: A string message indicating whether the file was written successfully
+        """
+        
+        try:
+            with open(f"prds/{filename}", "w") as f:
+                f.write(content)
 
-        filename = file[0]
+        except Exception:
+            return "Error : JSON object not found in the LLM response."
 
 
-        with open("prds/{filename}.txt", "w") as f:
-
-            f.write(file[1] if args else "")
-
-
-        return f"Requirements written to 'prds/requirements.txt'."
+        return f"Requirements written to 'prds/{filename}'."
