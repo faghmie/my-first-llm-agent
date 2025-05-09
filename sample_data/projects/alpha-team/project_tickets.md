@@ -1,0 +1,22 @@
+| Ticket Key | Title                    | Description                                                         | Status      | Created Date | Update Date | Complete Date | Days Taken to Complete |
+| ---------- | ------------------------ | ------------------------------------------------------------------- | ----------- | ------------ | ----------- | ------------- | ---------------------- |
+| TCK-1      | User Authentication      | Implement OAuth2/JWT for secure user login and registration.        | Done        | 2025-04-20   | 2025-04-27  | 2025-04-27    | 11                     |
+| TCK-2      | Menu Management          | Develop CRUD operations for menu items and categories.              | Done        | 2025-04-18   | 2025-04-28  | 2025-04-28    | 10                     |
+| TCK-3      | Shopping Cart            | Design cart with real-time updates and item persistence.            | Done        | 2025-04-10   | 2025-04-25  | 2025-04-25    | 15                     |
+| TCK-4      | Payment Integration      | Integrate Stripe API for credit card processing.                    | Done        | 2025-04-05   | 2025-04-20  | 2025-04-20    | 15                     |
+| TCK-5      | Order Tracking           | Build order status page with live updates via WebSocket.            | Done        | 2025-04-22   | 2025-05-03  | 2025-05-03    | 11                     |
+| TCK-6      | Admin Dashboard          | Create dashboard for order analytics and user management.           | In-Progress | 2025-04-25   | 2025-04-26  | -             | -                      |
+| TCK-7      | Email Notifications      | Set up order confirmation and status update emails.                 | In-Progress | 2025-04-28   | 2025-05-07  | -             | -                      |
+| TCK-8      | Search Functionality     | Add search filters for menu items by price, category, and keywords. | In-Progress | 2025-04-20   | 2025-04-28  | -             | -                      |
+| TCK-9      | Inventory Sync           | Sync menu availability with real-time inventory data.               | Review      | 2025-04-01   | 2025-05-04  | -             | -                      |
+| TCK-10     | User Profile Management  | Enable users to edit profiles and view order history.               | Review      | 2025-04-13   | 2025-04-25  | -             | -                      |
+| TCK-11     | Mobile Responsive Design | Optimize UI for mobile devices (iOS/Android).                       | Review      | 2025-05-12   | 2025-04-27  | -             | -                      |
+| TCK-12     | Promotions Engine        | Develop backend logic for discounts and coupon validation.          | In-Progress | 2025-04-27   | 2025-05-05  | -             | -                      |
+| TCK-13     | API Rate Limiting        | Configure rate limits for public API endpoints.                     | In-Progress | 2025-05-03   | 2025-05-07  | -             | -                      |
+| TCK-14     | Payment Gateway Testing  | Test PayPal integration (postponed due to Stripe priority).         | Withdrawn   | 2025-04-20   | 2025-05-02  | -             | -                      |
+| TCK-15     | Security Audit           | Penetration testing delayed until post-launch.                      | Withdrawn   | 2025-04-22   | 2025-04-24  | -             | -                      |
+| TCK-16     | Social Media Login       | Add Google/Facebook login options.                                  | To-Do       | 2025-04-05   | 2025-04-05  | -             | -                      |
+| TCK-17     | Multi-Language Support   | Implement i18n for English, Spanish, and French.                    | To-Do       | 2025-04-06   | 2025-04-06  | -             | -                      |
+| TCK-18     | Discount Code Handling   | Validate and apply promo codes at checkout.                         | To-Do       | 2025-04-07   | 2025-04-07  | -             | -                      |
+| TCK-19     | Performance Optimization | Improve server response time and caching.                           | To-Do       | 2025-04-07   | 2025-04-07  | -             | -                      |
+| TCK-20     | Order History Export     | Allow users to export order history as CSV/PDF.                     | To-Do       | 2025-05-03   | 2025-05-03  | -             | -                      |
