@@ -1,5 +1,7 @@
 
-FYI - This is what Windsurf wrote in VSCodium cause I'm too lazy to write the readme...LOL
+## FYI - This is what Windsurf wrote in VSCodium cause I'm too lazy to write the readme...LOL
+
+---
 
 # Project Overview
 ----
