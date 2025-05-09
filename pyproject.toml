@@ -1,5 +1,5 @@
 [project]
-name = "My AI Assistant"
+name = "Simple Software Delivery"
 version = "0.1.0"
 description = "This project is mean to teach me more about how to use AI and how to build an AI Assistant. Specifically focussed on local agents for private use."
 authors = [{name = "Faghmie Davids", email = "faghmie@gmail.com"}]

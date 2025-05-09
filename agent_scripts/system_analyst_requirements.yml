@@ -39,7 +39,7 @@ prompts:
   error_response: "I'm sorry, I encountered an issue processing your request."
   system: >
     **Primary Goal**: 
-    Your role is to take the user input and strictly compile the systems requirements into standardized markdown documentation.
+    Strictly compile the systems requirements into standardized markdown documentation.
     Never deviate from markdown format or file operation protocol.
     After you have compiled the requirements, you must save them to a file.
     Decide on the most appropriate filename based on the type of requirement.

@@ -1,12 +1,12 @@
 
-## FYI - This is what Windsurf wrote in VSCodium cause I'm too lazy to write the readme...LOL
+## FYI - This is what Windsurf wrote (except for the name) in VSCodium cause I'm too lazy to write the readme...LOL
 
 ---
 
-# Project Overview
+# Simple Software Delivery
 ----
 
-This project is a comprehensive system designed to streamline the process of managing software development projects. It leverages the power of natural language processing (NLP) and machine learning (ML) to automate tasks, improve collaboration, and enhance overall project efficiency.
+This project is a comprehensive system designed to assist with the process of software development. It leverages the power of natural language processing (NLP) and machine learning (ML) to automate tasks, improve collaboration, and enhance overall project efficiency.
 
 ## Features
 --------
@@ -16,6 +16,14 @@ This project is a comprehensive system designed to streamline the process of man
 *   **Jira Integration**: The system integrates with Jira to retrieve project information, including epics, stories, and tickets.
 *   **Stakeholder Management**: The system can identify stakeholders and their roles in the project.
 *   **Requirements Gap Analysis**: The system performs gap analysis on project requirements to identify potential issues.
+
+### Agent Script
+*   **Delivery Summary Report**: Generate summary report from verified ticket data, enforcing strict template compliance.
+*   **Delivery Ticket Analyst**: Automatically analyze project tickets, answer ticket-related questions, and generate activity reports
+*   **Project Task List**: Automatically gather requirements using available tools and then generate implementation tickets without commentary. Recommend tickets for missing requirements
+*   **Requirements Gap Analysis**: Automatically gather requirements using available tools and then analyse them and Recommend missing requirements
+*   **Requirements Risks Analysis**: Automatically gather requirements, analyze them for risks, and recommend mitigations
+*   **System Analyst Requirements**: Strictly compile the systems requirements into standardized markdown documentation
 
 ## Tools and Technologies
 ------------------------
