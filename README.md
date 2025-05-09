@@ -2,7 +2,7 @@
 FYI - This is what Windsurf wrote in VSCodium cause I'm too lazy to write the readme...LOL
 
 # Project Overview
-================
+----
 
 This project is a comprehensive system designed to streamline the process of managing software development projects. It leverages the power of natural language processing (NLP) and machine learning (ML) to automate tasks, improve collaboration, and enhance overall project efficiency.
 
