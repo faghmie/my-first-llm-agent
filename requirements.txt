@@ -5,6 +5,7 @@ atlassian-python-api
 beautifulsoup4
 html2text
 slack-sdk
+flask
 SpeechRecognition
 pyaudio
 pocketsphinx

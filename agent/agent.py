@@ -2,6 +2,7 @@ import json
 import re
 from datetime import datetime
 from ollama import chat, ChatResponse
+import threading
 
 from agent import AgentToolbox
 from agent import agent_config
@@ -11,6 +12,11 @@ class Agent():
     def __init__(self):
         self.toolbox = AgentToolbox()
         self.messages = []
+        self.stream_chunks = []
+
+        self._done_event = threading.Event()
+        self._result = None
+        self._thread = None
 
         print("AgentBase::__init__()")
 
@@ -32,12 +38,12 @@ class Agent():
                 "content": user_input
             })
 
-        with TimerWindow() as timer:
-            timer.run_in_background(self.query_llm)
-        # response = self.query_llm()
-        print(f'\n\n{timer.elapsed_time} elapsed\n\n')
+        # with TimerWindow() as timer:
+        #     timer.run_in_background(self.query_llm)
+        # print(f'\n\n{timer.elapsed_time} elapsed\n\n')
+        # return timer.result
 
-        return timer.result
+        return self.query_llm()
 
     def query_llm(self):
         print("Querying LLM...")
@@ -57,14 +63,15 @@ class Agent():
             # Stream the content incrementally
             content_part = chunk.get('message', {}).get('content', '')
             if content_part:
-                print(content_part, end='', flush=True)  # Stream to console
+                self.stream_chunks.append(content_part)
+                # print(content_part, end='', flush=True)  # Stream to console
                 full_response.append(content_part)
             
             # Check for tool invocation in the chunk (modify based on your model's output)
             if 'tool_calls' in chunk.get('message', {}):
                 tools_to_invoke = chunk['message']['tool_calls']
 
-        print("\n")
+        # print("\n")
 
         return self.use_tool(full_response, tools_to_invoke)
         
@@ -107,6 +114,43 @@ class Agent():
         
         return self.clean_llm_response(ai_msg)
 
+    def _run_task(self, agent_config_file: str, user_input:str):
+        """Internal thread runner"""
+        try:
+            self._done_event.clear()
+            self._result = self.run(agent_config_file, user_input)
+        finally:
+            self._done_event.set()
+    
+    def run_async(self, agent_config_file: str, user_input:str):
+        """Non-blocking version - returns immediately"""
+        if self._thread and self._thread.is_alive():
+            raise RuntimeError("Already running an async operation")
+        
+        self._thread = threading.Thread(
+            target=self._run_task,
+            args=(agent_config_file, user_input),
+        )
+
+        self._thread.start()
+
+    def run_sync(self, agent_config_file: str, user_input:str):
+        """Blocking version - waits for completion"""
+        self.run_async(agent_config_file, user_input)
+        self._thread.join()
+
+    def is_done(self):
+        """Check if task is completed"""
+        return self._done_event.is_set()
+
+    def get_result(self):
+        """Get task result (raises error if not complete)"""
+        if not self.is_done():
+            return None
+            # raise RuntimeError("Task not completed yet")
+
+        return self._result
+    
     def run(self, agent_config_file: str = "agents/_default_agent.yml", user_input:str = None):
         
         self.AgentConfig = agent_config.load_agent_config(agent_config_file)
@@ -126,12 +170,6 @@ class Agent():
         print(f"Model: {self.AgentConfig.model.name} ({self.AgentConfig.model.provider})")
 
         print(self.AgentConfig.prompts['greeting'])
-        
-        # from tools.jira_epics import jira_epic_list_tool
-        # from tools.jira_tickets import jira_ticket_list_tool
-        
-        # self.add_tool(jira_epic_list_tool)
-        # self.add_tool(jira_ticket_list_tool)
 
         self.toolbox.import_tools(self.AgentConfig.tools)
 

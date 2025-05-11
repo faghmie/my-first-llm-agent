@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add New Prompt</h1>
+    <form method="POST">
+        <label>Name:</label>
+        <input type="text" name="name" required>
+        <br>
+        <label>Prompt Content:</label>
+        <textarea name="content" rows="10" required>{{content}}</textarea>
+        <br>
+        <button type="submit">Save</button>
+    </form>
+    <a href="{{ url_for('index') }}" class="back-link hidden" id="back-link">Back to List</a>
+{% endblock %}

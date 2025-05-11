@@ -6,7 +6,7 @@ import _example_config
 from agent import Agent
 
 # query for a summary report
-#   find gaps in the online order system
+#   highlight risks in the online order system
 
 agent = Agent()
-agent.run(agent_config_file="agent_scripts/requirements_gap_analysis.yml")
+agent.run(agent_config_file="agent_scripts/requirements_risk_analysis.yml")

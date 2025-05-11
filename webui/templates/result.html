@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="result-container">
+        <h1>Running: <span id="task-name"></span></h1>
+        <div id="prompt-details" class="hidden">
+            <h3>User Prompt:</h3>
+            <pre id="user-prompt"></pre>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <div class="pulse"></div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-indicator"></div>
+            </div>
+            <div class="timer">
+                <span class="timer-label">Elapsed Time:</span>
+                <span id="timer">00:00:00</span>
+            </div>
+            <p class="processing-text">Processing your request...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="hidden">
+            <h2>Final Output:</h2>
+            <pre id="output"></pre>
+            <a href="{{ url_for('index') }}" class="back-link">Back to List</a>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error hidden">
+            <h2>Something went wrong!</h2>
+            <pre id="error-message"></pre>
+            <a href="{{ url_for('index') }}" class="back-link">Back to List</a>
+        </div>
+    </div>
+
+    <script>
+        // Only start checking after page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskId = window.location.pathname.split('/').pop();
+            let startTime = Date.now();
+            let timerInterval;
+            
+            const timeout_in_seconds = 0.1;
+            function formatTime(ms) {
+                const seconds = Math.floor(ms / 1000);
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+
+            function updateTimer() {
+                const elapsed = Date.now() - startTime;
+                document.getElementById('timer').textContent = formatTime(elapsed);
+            }
+
+            function showResults(output) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('results').classList.remove('hidden');
+                document.getElementById('output').textContent += output;
+            }
+
+            function showError(message) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('error-message').textContent = message;
+            }
+
+            async function checkStatus() {
+                try {
+                    // Stop Timer
+                    const response = await fetch(`/status/${taskId}`);
+                    const data = await response.json();
+                    console.log(data)
+                    if (data.status === 'running') {
+                        document.getElementById('task-name').textContent = data.name;
+                        if (data.user_prompt) {
+                            document.getElementById('user-prompt').textContent = data.user_prompt;
+                            document.getElementById('prompt-details').classList.remove('hidden');
+                            showResults(data.output);
+                        }
+                        setTimeout(checkStatus, timeout_in_seconds);
+                    } else if (data.status === 'completed') {
+                        showResults(data.output);
+                    } else  if (data.status === 'error') {
+                        showError(data.message || 'Unknown error occurred');
+                    }
+
+                } catch (error) {
+                    showError(`Network error: ${error.message}`);
+                }
+            }
+
+            // Start checks
+            timerInterval = setInterval(updateTimer, 1000);
+            setTimeout(checkStatus, timeout_in_seconds);
+        });
+    </script>
+{% endblock %}

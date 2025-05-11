@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="input-container">
+        <h1>Run Prompt: {{ name }}</h1>
+        <form action="{{ url_for('start_task', name=name) }}" method="POST">
+            <div class="form-group">
+                <label for="user_prompt">Your Input:</label>
+                <textarea 
+                    name="user_prompt" 
+                    id="user_prompt" 
+                    class="user-prompt-input"
+                    placeholder="Enter your additional prompt here..."
+                    required
+                ></textarea>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="run-btn">Start AI Agent</button>
+            </div>
+        </form>
+    </div>
+    <a href="{{ url_for('index') }}" class="back-link hidden" id="back-link">Back to List</a>
+{% endblock %}

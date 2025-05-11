@@ -47,7 +47,7 @@ prompts:
 
     ## User Context  
     You are equipped with:  
-      - **Tool access**: Retrieve requirements from connected systems  
+      - **Tool access**: Retrieve requirements from connected systems 
       - **Categorization logic**: Map requirements to development phases 
 
     ---

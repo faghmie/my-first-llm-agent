@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>AI Prompts</h1>
+<ul>
+    {% for prompt in prompts %}
+        <li>
+            <h3>{{ prompt.name }}</h3>
+            <pre>{{ prompt.content }}</pre>
+            <div class="actions">
+                <a href="{{ url_for('edit_prompt', name=prompt.name) }}" class="edit-btn">Edit</a>
+                <a href="{{ url_for('run_input', name=prompt.name) }}" class="run-btn">Run</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
