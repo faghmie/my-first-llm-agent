@@ -225,6 +225,7 @@ textarea {
     display: none;
 }
 
+
 /* Progress Bar */
 .progress-bar {
     width: 200px;
@@ -427,4 +428,42 @@ textarea {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Agent Grid */
+.agent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.agent-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.agent-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.agent-content h3 {
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+}
+
+.agent-content p {
+    color: #4a5568;
+    line-height: 1.4;
+}
+
+/* Agent Title in Input Screen */
+#agent-title {
+    color: #2563eb;
 }

@@ -1,7 +1,10 @@
 import os
 import sys
 import uuid
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+import yaml
+import json
+
+from flask import Flask, render_template, request, redirect, url_for, jsonify, Response
 from dotenv import load_dotenv
 import subprocess
 
@@ -30,12 +33,13 @@ def get_prompts():
             path = os.path.join(PROMPTS_DIR, filename)
             config = load_agent_config(path)
 
-            # with open(path, 'r') as f:
-            #     content = f.read()
             prompts.append({
                 'name': filename[:-4],
                 'content': f"{config.agent.description}\n\n{config.model.name} ({config.model.provider})"
             })
+    
+    prompts = sorted(prompts, key=lambda x: x["name"])
+
     return prompts
 
 @app.route('/')
@@ -84,16 +88,29 @@ def edit_prompt(name):
     )
 
 # Add these new routes
-@app.route('/run/<name>/input')
-def run_input(name):
-    return render_template('input.html', name=name)
+@app.route('/run/<agent_name>/input')
+def run_input(agent_name):
+    return render_template('input.html', agent_name=agent_name)
 
-@app.route('/start_task/<name>', methods=['POST'])
-def start_task(name):
-    user_prompt = request.form['user_prompt']
-    filename = f"{name}.yml"
+@app.route('/api/agent/<agent_name>', methods=['GET'])
+def agent_details(agent_name):
+    filename = f"{agent_name}.yml"
     filepath = os.path.join(PROMPTS_DIR, filename)
-    task_id = execute_agent(name, filepath, user_prompt)
+    
+    with open(filepath, 'r') as f:
+        yaml_obj = yaml.safe_load(f) 
+        json_str = json.dumps(yaml_obj)
+    
+    return Response(json_str, mimetype='application/json')
+
+@app.route('/start_task', methods=['POST'])
+def start_task(): 
+    agent_name = request.form['agent_name']
+    user_prompt = request.form['user_prompt']
+
+    filename = f"{agent_name}.yml"
+    filepath = os.path.join(PROMPTS_DIR, filename)
+    task_id = execute_agent(agent_name, filepath, user_prompt)
     return redirect(url_for('view_result',  task_id=task_id))
 
 @app.route('/results/<task_id>')
@@ -102,7 +119,7 @@ def view_result(task_id):
 
 
 # Modify execute_agent function
-def execute_agent(name, filepath, user_prompt):
+def execute_agent(agent_name, filepath, user_prompt):
     """Long-running task simulation"""
     task_id = str(uuid.uuid4())
     agent = Agent()
@@ -111,7 +128,7 @@ def execute_agent(name, filepath, user_prompt):
     tasks[task_id] = {
         'status': 'running',
         'output': 'Agent started....',
-        'name': name,
+        'name': agent_name,
         'stream_index': 0,
         'user_prompt': user_prompt,
         'process': agent

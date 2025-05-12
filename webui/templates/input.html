@@ -2,22 +2,86 @@
 
 {% block content %}
     <div class="input-container">
-        <h1>Run Prompt: {{ name }}</h1>
-        <form action="{{ url_for('start_task', name=name) }}" method="POST">
-            <div class="form-group">
+        <h1>Launch Agent: <span id="agent-title">{{ agent_name }}</span></h1>
+        
+        <!-- Top Controls -->
+        <form action="{{ url_for('start_task') }}" method="POST" id="agent-form">
+            <input type="hidden" name="agent_name" value="{{ agent_name }}">
+            <div class="user-input-group">
                 <label for="user_prompt">Your Input:</label>
                 <textarea 
                     name="user_prompt" 
                     id="user_prompt" 
                     class="user-prompt-input"
-                    placeholder="Enter your additional prompt here..."
+                    placeholder="Enter your request here..."
                     required
                 ></textarea>
-            </div>
-            <div class="button-container">
-                <button type="submit" class="run-btn">Start AI Agent</button>
+                <button type="submit" class="run-btn">Launch AI Agent</button>
             </div>
         </form>
+
+        <!-- Dynamic Configuration Display -->
+        <div class="config-display">
+            <div class="config-section" id="agent-config">
+                <h3>Agent Configuration</h3>
+                <pre class="yaml-content">Loading...</pre>
+            </div>
+
+            <div class="config-section" id="metadata-config">
+                <h3>Metadata</h3>
+                <pre class="yaml-content">Loading...</pre>
+            </div>
+
+            <div class="config-section" id="tools-config">
+                <h3>Tools</h3>
+                <pre class="yaml-content">Loading...</pre>
+            </div>
+
+            <div class="config-section" id="model-config">
+                <h3>Model Configuration</h3>
+                <pre class="yaml-content">Loading...</pre>
+            </div>
+
+            <div class="config-section" id="prompts-config">
+                <h3>Prompt Templates</h3>
+                <pre class="yaml-content">Loading...</pre>
+            </div>
+        </div>
     </div>
-    <a href="{{ url_for('index') }}" class="back-link hidden" id="back-link">Back to List</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const agentName = "{{ agent_name }}";
+            
+            try {
+                // Load agent config
+                const response = await fetch(`/api/agent/${agentName}`);
+
+                if (!response.ok) throw new Error('Agent config not found');
+                
+                const jsonContent = await response.json();
+
+                // Parse and display YAML sections
+                const sections = {
+                    'agent': 'agent-config',
+                    'metadata': 'metadata-config',
+                    'model': 'model-config',
+                    'prompts': 'prompts-config',
+                    'tools': 'tools-config'
+                };
+                
+                
+                for (section in jsonContent){
+                    console.log(section, jsonContent[section])
+                    const preElement = document.getElementById(sections[section]).querySelector('pre');
+                    preElement.textContent = jsonContent[section] ? JSON.stringify(jsonContent[section], null, 4) : 'Section not found';
+                }
+
+            } catch (error) {
+                console.error('Error loading agent config:', error);
+                alert('Failed to load agent configuration');
+                window.location = '/';
+            }
+        });
+    </script>
 {% endblock %}
