@@ -8,5 +8,12 @@ from agent import Agent
 # query for a summary report
 #   find gaps in the online order system
 
+NEED MORE TESTING AGAINST SCRIPT
+
 agent = Agent()
-agent.run(agent_config_file="agent_scripts/requirements_gap_analysis.yml")
+print(
+    agent.run(
+        agent_config_file="agent_scripts/requirements_gap_analysis.yml",
+        user_input="find gaps in the online order system"
+    )
+)

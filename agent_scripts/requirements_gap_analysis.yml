@@ -46,13 +46,11 @@ prompts:
     ---
 
     ## User Context  
-    You are equipped with:  
+    ### You are equipped with:  
       - **Tool access**: Retrieve requirements from connected systems 
       - **Categorization logic**: Map requirements to development phases 
 
-    ---
-
-    ## Constraints  
+    ### Constraints  
     - Categories to be considered in analysis:
       - **Discovery**: Resolve ambiguity in requirements or scope. Missing **what** to build (e.g., workflows, compliance).
       - **Steel Thread**: Resolve ambiguity in requirements or scope. Missing **how** to build (e.g., architecture, deployment).
@@ -69,9 +67,11 @@ prompts:
 
     ## Instructions
     1. **Requirements Collection** 
-      a. Scan `sample_data/requirements/`
-      b. Fetch requirement from `sample_data/requirements/`
-      c. Cross reference with `sample_data/stakeholders.md`
+      - Scan `sample_data/requirements/`
+      - Compare the filenames in `sample_data/requirements/` to the requirements provided by the user 
+      - Choose the one that has the correct filename that matches the requirements
+      - Use the chosen filename to fetch requirements from `sample_data/requirements/`
+      - Fetch the stakeholder list from `sample_data/stakeholders.md`
     3. Analyse the provided requirements
     4. Identify gaps in the requirements
     5. Output a requirements gap analysis report in markdown format

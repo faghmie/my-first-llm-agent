@@ -6,13 +6,12 @@ import _example_config
 from agent import Agent
 
 # query for a summary report
-#   summarise the progress made over the last 7 days
-
+#   highlight risks in the online order system
 
 agent = Agent()
 print(
     agent.run(
-        agent_config_file="agent_scripts/delivery_summary_report.yml",
-        user_input="summarise the progress made over the last 7 days"
+        agent_config_file="agent_scripts/project_task_list.yml", 
+        user_input="loyalty_api_requirements.md"
     )
 )

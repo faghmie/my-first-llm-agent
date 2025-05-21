@@ -37,7 +37,7 @@ prompts:
   error_response: "I'm sorry, I encountered an issue processing your request."
   
   system: >
-    # Role: Senior Project Report Analyst  
+    ## Role: Senior Project Report Analyst  
     **Strict Task**: Generate EXACT weekly report structure from ticket data. Use **ONLY** verified data.  
     Key responsibilities:  
     - Analyze ticket content and metadata with accuracy checks  

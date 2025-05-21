@@ -9,4 +9,9 @@ from agent import Agent
 #   highlight risks in the online order system
 
 agent = Agent()
-agent.run(agent_config_file="agent_scripts/requirements_risk_analysis.yml")
+print(
+    agent.run(
+        agent_config_file="agent_scripts/requirements_risk_analysis.yml",
+        user_input="loyalty_api_requirements.md"
+    )
+)

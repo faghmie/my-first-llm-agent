@@ -16,11 +16,25 @@ class ModelConfig:
     parameters: Dict[str, float]
 
 @dataclass
+class AgentSystemPrompt:
+    role: str
+    system_context: str
+    instructions: str
+    constraints: str
+    
+@dataclass
+class AgentPrompts:
+    greeting: str
+    error_response: str
+    system: str
+    
+@dataclass
 class AIConfig:
     agent: AgentConfig
     model: ModelConfig
     tools: List[Dict]
-    prompts: Dict[str, str]
+    # prompts: Dict[str, str]
+    prompts: AgentPrompts
     metadata: Dict[str, str]
 
 def load_agent_config(file_path: str) -> AIConfig:
